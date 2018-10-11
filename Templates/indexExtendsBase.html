@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+        .error{ color: red; }
+    </style>
+<form action= "/" method="post">
+    <table>
+        <tr>
+            <td>
+                <label for="username">
+                    Username
+                </label>
+            </td>
+            <td>
+                <input name="username" type="text" value={{username}}>
+                <span class="error"></span>
+            </td>
+            {% if username_errors %}
+                    <td><p class="error">That's not a valid username</p></td>
+                {% endif %}
+        </tr>
+        <tr>
+            <td>
+                <label for="password">
+                    Password
+                </label>
+            </td>
+            <td>
+                <input name="password" type="password">
+                <span class="error"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="verify">
+                    Verify Password
+                </label>
+            </td>
+            <td>
+                <input name="verify" type="password">
+                <span class="error"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="email">
+                    Email (optional)
+                </label>
+            </td>
+            <td>
+                <input type="text" name="email" value="">
+                <span class="error"></span>
+            </td>
+        </tr>
+    </table>
+
+    <input type="submit">
+
+<!-- <style>
+.error{ color: red; }
+</style> -->
+
+</form>
+{% endblock %}
