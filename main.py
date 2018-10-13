@@ -22,46 +22,57 @@ def index():
 def hello():
     username = request.form['username']
     password = request.form['password']
-    verify_password = request.form['verify']
+    verified_password = request.form['verify']
     email = request.form['email']
 
-    username_errors = False
-    password_errors = False     #wondering if we can group these in a list as "Errors" then run if errors is true return to template, else welcome
-    verify_errors = False
     email_errors = False
+
+
+#USERNAME CHECK
+    username_errors = determine_username_errors(username)
+
+#PASSWORD CHECK
+    password_errors = determine_password_errors(password)
+
+#VERIFICATION OF PASSWORD CHECK
+    verification_errors_exist = determine_verification_errors_exist(verified_password, password)
+    
+#VALID EMAIL CHECK
+    email_errors = determine_email_errors(email)
     
 
-    if len(username) < 3 or len(username) > 20:
-        username_errors = True
-    elif " " in username:
-        username_errors = True
-    # elif username_errors:
-        # return render_template('indexExtendsBase.html', title="User signup", username_errors=username_errors, username=username)
-    # else:
-    #     return render_template('WelcomePage.html')
-    elif len(password) < 3 or len(password) > 20:
-        password_errors = True
-    elif " " in password:
-        password_errors = True
-    elif verify_password != password:
-        verify_errors = True
-    # elif "@" not in email or "." not in email:
-    #     email_errors = True
-    # elif email == None:
-    #     email_errors = False
-    
-#what about some sort of for loop, for error display error message? Need to get it to show all of them if they are all messed up, but not stopped by email if none input
-
-
-    if username_errors:
-        return render_template('indexExtendsBase.html', title="User signup", username_errors=username_errors, username=username)
-    if password_errors == True:
-        return render_template('indexExtendsBase.html', title="User signup", password_errors=password_errors, username=username)
-    if verify_errors:
-        print("This one") #NOT GETTING TO THIS ONE
-        return render_template('indexExtendsBase.html', title="User signup",verify_errors=verify_errors,  username=username)
+# Error Check if no Errors redirect to Welcome Page
+    if username_errors or password_errors or verification_errors_exist or email_errors:
+        return render_template('indexExtendsBase.html', title="User signup",username=username, username_errors=username_errors, password_errors=password_errors, verification_errors_exist=verification_errors_exist, email=email, email_errors=email_errors)
     else:
-        return render_template('WelcomePage.html')
+        return render_template('WelcomePage.html', username=username)
+
+def determine_username_errors(username):
+        if len(username) < 3 or len(username) > 20:
+            return True
+        elif " " in username:
+            return True
+        else:
+            return False
+def determine_password_errors(password):
+        if len(password) < 3 or len(password) > 20:
+            return True
+        elif " " in password:
+            return True
+        else:
+            return False
+def determine_verification_errors_exist(verified_password, password):
+        if verified_password != password:
+            return True
+        else:
+            return False
+
+def determine_email_errors(email):
+        if email == "":
+            return False
+        elif "@" not in email or "." not in email:
+            return  True
+
 
 
 app.run()
