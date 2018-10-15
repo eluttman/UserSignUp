@@ -64,6 +64,8 @@ def determine_password_errors(password):
 def determine_verification_errors_exist(verified_password, password):
         if verified_password != password:
             return True
+        elif verified_password == '':
+            return True
         else:
             return False
 
